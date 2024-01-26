@@ -18,11 +18,21 @@ node {
     }
 
     stage("Publish Code Coverage") {
-      recordCoverage ignoreParsingErrors: true,
-        sourceCodeRetention: 'NEVER',
-        tools: [
-          [parser: 'COBERTURA', pattern: 'coverage/**/cobertura-coverage.xml']
-        ]
+      // recordCoverage ignoreParsingErrors: true,
+      // sourceCodeRetention: 'NEVER',
+      // tools: [
+      //     [parser: 'COBERTURA', pattern: 'coverage/**/cobertura-coverage.xml']
+      // ]
+
+      // use the Code Coverage plug-in together with the Cobertura plug-in instead
+      publishCoverage adapters: [
+        coberturaAdapter(
+          mergeToOneReport: true,
+          path: 'coverage/**/cobertura-coverage.xml'
+        )
+      ]
+      sourceFileResolver:
+      sourceFiles('NEVER_STORE')
     }
   }
 }
